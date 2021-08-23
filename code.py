@@ -3,36 +3,14 @@ import board
 import busio
 import pwmio
 import digitalio
-from adafruit_bus_device.i2c_device import I2CDevice
+import adafruit_ds3231
 from analogio import AnalogIn
 
 i2c = busio.I2C(board.GP1,board.GP0 )
-# address for RV3028 Real Time Clock
-i2caddress = 0x52
-# RV3208 Registers
-SECONDS = 0x00  # count of seconds, in 2 BCD digits. Values from 00 to 59.
-MINUTES = 0x01  # count of minutes, in 2 BCD digits. Values from 00 to 59.
-HOURS   = 0x02  # count of hours, in 2 BCD digits. Values from 00 to 12, or 00 to 24. 
-WEEKDAY = 0x03
-DATE    = 0x04
-MONTH   = 0x05
-YEAR    = 0x06
-rtc = I2CDevice(i2c,i2caddress)
 
-def decode_rtc(value):
-  upper = ((int.from_bytes(value, "big") & 0xF0) >> 4) * 10
-  lower = (int.from_bytes(value, "big") & 0x0F)
-  return(upper + lower)
+rtc = adafruit_ds3231.DS3231(i2c)
 
-def get_rtc(register):
-  with rtc:
-    rtc.write(bytes([register]))
-    result = bytearray(1)
-    rtc.readinto(result)
-    return decode_rtc(result)
-
-
-log_file_name = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}-{5:02d}.csv".format(get_rtc(YEAR)+2000,get_rtc(MONTH),get_rtc(DATE),get_rtc(HOURS),get_rtc(MINUTES),get_rtc(SECONDS))
+log_file_name = "{0}{1:02d}{2:02d}-{3:02d}{4:02d}-{5:02d}.csv".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,rtc.datetime.tm_sec)
 dbmeter = AnalogIn(board.A0)
 
 blue_led = digitalio.DigitalInOut(board.LED_B)
@@ -74,8 +52,8 @@ while logging_enabled:
     samples=[]
     try:
       with open(log_file_name, "a") as log_file:
-        log_file.write("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(get_rtc(YEAR)+2000,get_rtc(MONTH),get_rtc(DATE),get_rtc(HOURS),get_rtc(MINUTES),smean,smin,smax))
-        print("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(get_rtc(YEAR)+2000,get_rtc(MONTH),get_rtc(DATE),get_rtc(HOURS),get_rtc(MINUTES),smean,smin,smax))
+        log_file.write("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,rtc.datetime.tm_sec,smean,smin,smax))
+        print("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,rtc.datetime.tm_sec,smean,smin,smax))
     except OSError as e:
       while True:
         blue_led.value = False
