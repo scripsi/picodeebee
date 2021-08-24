@@ -52,8 +52,8 @@ while logging_enabled:
     samples=[]
     try:
       with open(log_file_name, "a") as log_file:
-        log_file.write("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,rtc.datetime.tm_sec,smean,smin,smax))
-        print("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,rtc.datetime.tm_sec,smean,smin,smax))
+        log_file.write("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,smean,smin,smax))
+        print("{0}-{1:02d}-{2:02d}T{3:02d}:{4:02d},{5:.1f},{6:.1f},{7:.1f}\n".format(rtc.datetime.tm_year,rtc.datetime.tm_mon,rtc.datetime.tm_mday,rtc.datetime.tm_hour,rtc.datetime.tm_min,smean,smin,smax))
     except OSError as e:
       while True:
         blue_led.value = False
