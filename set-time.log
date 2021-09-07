@@ -1,4 +1,8 @@
+Auto-reload is on. Simply save files over USB to run them or enter REPL to disable.
 
+Press any key to enter the REPL. Use CTRL-D to reload.
+
+Adafruit CircuitPython 6.3.0 on 2021-06-01; Pimoroni Tiny 2040 with rp2040
 >>> import board
 >>> import busio
 >>> import time
@@ -11,9 +15,9 @@ NameError: name 'i2c' is not defined
 >>> ds3231 = adafruit_ds3231.DS3231(i2c)
 >>> current = ds3231.datetime
 >>> print('The RTC time is: {}-{}-{} {:02}:{:02}:{:02}'.format(current.tm_mday, current.tm_mon, current.tm_year, current.tm_hour, current.tm_min, current.tm_sec))
-The RTC time is: 23-8-2021 08:59:57
->>> ds3231.datetime = time.localtime(1629709198)
+The RTC time is: 7-9-2021 13:40:14
+>>> ds3231.datetime = time.localtime(1631022017)
 >>> updated = ds3231.datetime
 >>> print('The RTC time is now: {}-{}-{} {:02}:{:02}:{:02}'.format(updated.tm_mday, updated.tm_mon, updated.tm_year, updated.tm_hour, updated.tm_min, updated.tm_sec))
-The RTC time is now: 23-8-2021 08:59:58
+The RTC time is now: 7-9-2021 13:40:17
 >>> 
